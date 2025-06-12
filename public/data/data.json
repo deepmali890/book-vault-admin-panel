@@ -1,0 +1,79 @@
+{
+  "setSidebarItem": [
+    {
+      "name": "Dashboard",
+      "href": "/admin",
+      "icon": "LayoutDashboard"
+    },
+    {
+      "name": "Book Categories",
+      "href": "addbookcategory",
+      "icon": "ListOrdered"
+    },
+    {
+      "name": "Sub Categories",
+      "href": "addsubcategory",
+      "icon": "ListTree"
+    },
+    {
+      "name": "Books",
+      "href": "addbook",
+      "icon": "BookOpen"
+    },
+    {
+      "name": "Episodes",
+      "href": "addepisode",
+      "icon": "FileText"
+    },
+    {
+      "name": "Blogs",
+      "href": "/blogs",
+      "icon": "NotebookPen"
+    },
+    {
+      "name": "Slider",
+      "href": "/slider",
+      "icon": "Image"
+    },
+    {
+      "name": "Orders",
+      "href": "orders",
+      "icon": "ShoppingCart"
+    },
+    {
+      "name": "Core Members",
+      "href": "createuser",
+      "icon": "Users"
+    },
+    {
+      "name": "Inquiries",
+      "href": "inquire",
+      "icon": "MessagesSquare"
+    },
+    {
+      "name": "Stories",
+      "href": "/stories",
+      "icon": "BookMarked"
+    },
+    {
+      "name": "Settings",
+      "href": "/settings",
+      "icon": "Settings"
+    },
+    {
+      "name": "Help",
+      "href": "/help",
+      "icon": "HelpCircle"
+    },
+    {
+      "name": "Messages",
+      "href": "/messages",
+      "icon": "MessageCircle"
+    },
+    {
+      "name": "Notifications",
+      "href": "notification",
+      "icon": "Bell"
+    }
+  ]
+}
