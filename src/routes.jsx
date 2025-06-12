@@ -14,6 +14,7 @@ import AddEpisode from './pages/episode/AddEpisode';
 import Notification from './pages/notifications/Notification';
 import Inquire from './pages/inquire/Inquire';
 import Orders from './pages/orders/Orders';
+import ViewBook from './pages/book/ViewBook';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "addsubcategory", element: <AddSubCategory /> },
       { path: "viewsubcategory", element: <ViewSubCategory /> },
       { path: "addbook", element: <AddBook /> },
+      { path: "viewbook", element:<ViewBook/>},
       { path: "addepisode", element: <AddEpisode /> },
       // { path: "viewepisode", element: <ViewEpisode /> },
       { path: "notification", element: <Notification /> },

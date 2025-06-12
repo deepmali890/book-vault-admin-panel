@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-// Sample books for design purpose, tu baad me API se dynamic fetch karega
-const sampleBooks = [
-  { _id: '1', name: 'The Alchemist' },
-  { _id: '2', name: 'Harry Potter' },
-  { _id: '3', name: 'Rich Dad Poor Dad' },
-];
+import axiosInstance from '@/lib/axios';
+import { toast } from 'sonner';
 
 const AddEpisodeDesign = () => {
   const [selectedBook, setSelectedBook] = useState('');
+  const [episodeTitle, setEpisodeTitle] = useState('');
+  const [episodeNumber, setEpisodeNumber] = useState('');
+  const [description, setDescription] = useState('');
   const [audioFile, setAudioFile] = useState(null);
   const [audioName, setAudioName] = useState(null);
   const [audioPreview, setAudioPreview] = useState(null);
+  const [books, setBooks] = useState([]);
 
-  // (Future Scope: fetch books from API)
+  const fetchBooks = async () => {
+    try {
+      const res = await axiosInstance.get('/book/allBooks');
+      if (res.data.success) {
+        setBooks(res.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
+
   useEffect(() => {
-    // TODO: Fetch book list from API
+    fetchBooks();
   }, []);
 
   const handleAudioChange = (e) => {
@@ -26,6 +35,46 @@ const AddEpisodeDesign = () => {
     setAudioName(file?.name);
     if (file) {
       setAudioPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectedBook || !episodeTitle || !episodeNumber || !description || !audioFile) {
+      alert("All fields are required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", episodeTitle);
+    formData.append("episodeNumber", episodeNumber);
+    formData.append("description", description);
+    formData.append("audio", audioFile);
+
+    try {
+      const res = await axiosInstance.post(`/episode/book/${selectedBook}/episode`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message)
+        // clear form after success
+        setEpisodeTitle('');
+        setEpisodeNumber('');
+        setDescription('');
+        setSelectedBook('');
+        setAudioFile(null);
+        setAudioName(null);
+        setAudioPreview(null);
+      } else {
+        alert("Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error uploading episode:", error);
+      alert("Error uploading episode");
     }
   };
 
@@ -39,10 +88,9 @@ const AddEpisodeDesign = () => {
           </Link>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
 
-            {/* Book Selection */}
             <div className="sm:col-span-2">
               <label className="block mb-2 text-sm font-medium">Select Book</label>
               <select
@@ -51,7 +99,7 @@ const AddEpisodeDesign = () => {
                 className="bg-zinc-900 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5"
               >
                 <option value="">-- Select Book --</option>
-                {sampleBooks.map(book => (
+                {books.map(book => (
                   <option key={book._id} value={book._id}>{book.name}</option>
                 ))}
               </select>
@@ -61,6 +109,8 @@ const AddEpisodeDesign = () => {
               <label className="block mb-2 text-sm font-medium">Episode Title</label>
               <input
                 type="text"
+                value={episodeTitle}
+                onChange={(e) => setEpisodeTitle(e.target.value)}
                 className="bg-zinc-900 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5"
                 placeholder="Enter Episode Title"
               />
@@ -70,6 +120,8 @@ const AddEpisodeDesign = () => {
               <label className="block mb-2 text-sm font-medium">Episode Number</label>
               <input
                 type="number"
+                value={episodeNumber}
+                onChange={(e) => setEpisodeNumber(e.target.value)}
                 className="bg-zinc-900 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5"
                 placeholder="Enter Episode Number"
               />
@@ -79,6 +131,8 @@ const AddEpisodeDesign = () => {
               <label className="block mb-2 text-sm font-medium">Description</label>
               <textarea
                 rows="4"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="bg-zinc-900 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5"
                 placeholder="Enter Description"
               />
@@ -105,8 +159,8 @@ const AddEpisodeDesign = () => {
 
           </div>
 
-          <button type="button" className="inline-flex items-center px-5 py-2.5 mt-6 text-sm font-semibold rounded-md bg-white text-black transition hover:scale-105">
-            Submit
+          <button type="submit" className="inline-flex items-center px-5 py-2.5 mt-6 text-sm font-semibold rounded-md bg-white text-black transition hover:scale-105">
+            Add Episode
           </button>
         </form>
       </div>

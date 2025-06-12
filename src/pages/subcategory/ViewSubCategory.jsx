@@ -4,30 +4,30 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@/lib/axios';
 
 const ViewSubCategory = () => {
-    const [category, setCategory] = useState([]);
+    const [subCategory, setSubCategory] = useState([]);
 
-    const fetchCategory = async () => {
+    const fetchSubCategory = async () => {
         try {
-         const response = await axiosInstance.get('/bookCategory')
+         const response = await axiosInstance.get('/subCategory/all')
             console.log("hello mister ",response.data);
             if (response.status === 200) {
                 const data = response.data?.data || [];
-                setCategory(Array.isArray(data) ? data : []);
+                setSubCategory(Array.isArray(data) ? data : []);
             }
         } catch (error) {
             console.error('Error fetching category:', error);
         }
     };
-console.log("category",category)
+console.log("category",subCategory)
     useEffect(() => {
-        fetchCategory();
+        fetchSubCategory();
     }, []);
 
     return (
         <div className="bg-white/5 p-4 backdrop-blur-3xl rounded-md">
             <div className="flex w-full justify-between text-white text-2xl my-6 px-4">
                 <h2>View Category</h2>
-                <Link to="/admin/addbookcategory">
+                <Link to="/admin/addsubcategory">
                     <Pencil />
                 </Link>
             </div>
@@ -36,6 +36,7 @@ console.log("category",category)
                 <table className="w-full text-left table-auto min-w-max text-white">
                     <thead>
                         <tr className="border-b">
+                            <th className="p-4 text-sm font-semibold uppercase tracking-wider">SubCategory Name</th>
                             <th className="p-4 text-sm font-semibold uppercase tracking-wider">Category Name</th>
                             <th className="p-4 text-sm font-semibold uppercase tracking-wider">Date</th>
                             <th className="p-4 text-sm font-semibold uppercase tracking-wider">Role</th>
@@ -47,10 +48,13 @@ console.log("category",category)
                         </tr>
                     </thead>
                     <tbody>
-                        {category.map((item, index) => (
+                        {subCategory.map((item, index) => (
                             <tr key={item._id || index} className="hover:bg-white/10 rounded-lg">
                                 <td className="p-4">
                                     <p className="text-sm font-bold">{item.name || 'N/A'}</p>
+                                </td>
+                                <td className="p-4">
+                                    <p className="text-sm font-bold">{item.parentCategory.name || 'N/A'}</p>
                                 </td>
                                 <td className="p-4">
                                     <p className="text-sm">{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A'}</p>
